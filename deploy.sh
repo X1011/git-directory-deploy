@@ -24,7 +24,7 @@ git --work-tree $deploy_directory add --all
 if git diff --exit-code --quiet HEAD; then
 	git --work-tree $deploy_directory commit -m \
 		"publish: $commit_title"$'\n\n'"generated from commit $commit_hash"
-	git push -n $deploy_branch
+	git push origin $deploy_branch
 else
 	echo No changes to files in $deploy_directory. Skipping commit.
 fi
