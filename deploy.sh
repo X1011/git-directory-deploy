@@ -21,7 +21,7 @@ fi
 git --work-tree $deploy_directory checkout $deploy_branch --force
 git --work-tree $deploy_directory add --all
 
-if git diff --exit-code --quiet HEAD; then
+if git --work-tree $deploy_directory diff --exit-code --quiet HEAD; then
 	git --work-tree $deploy_directory commit -m \
 		"publish: $commit_title"$'\n\n'"generated from commit $commit_hash"
 	git push origin $deploy_branch
