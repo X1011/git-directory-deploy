@@ -25,13 +25,17 @@ if [[ $previous_branch = "HEAD" ]]; then
 	previous_branch=$commit_hash
 fi
 
-if ! ( git diff --exit-code --quiet \
-    && git diff --exit-code --quiet --cached ); then
-	echo Aborting due to uncommitted changes
+if ! git diff --exit-code --quiet --cached; then
+	echo Aborting due to uncommitted changes in the index
 	exit 1
 fi
 
-git --work-tree "$deploy_directory" checkout $deploy_branch --force
+#make deploy_branch the current branch
+git symbolic-ref HEAD refs/heads/$deploy_branch
+
+#put the previously committed contents of deploy_branch branch into the index 
+git --work-tree "$deploy_directory" reset --mixed
+
 git --work-tree "$deploy_directory" add --all
 
 if git --work-tree "$deploy_directory" diff --exit-code --quiet HEAD; then
@@ -43,4 +47,5 @@ else
 	git push origin $deploy_branch
 fi
 
-git checkout $previous_branch --force
+git symbolic-ref HEAD refs/heads/$previous_branch
+git reset --mixed
