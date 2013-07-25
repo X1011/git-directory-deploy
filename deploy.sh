@@ -21,9 +21,6 @@ set_user_id() {
 }
 
 previous_branch=`git rev-parse --abbrev-ref HEAD`
-if [[ $previous_branch = "HEAD" ]]; then
-	previous_branch=$commit_hash
-fi
 
 if ! git diff --exit-code --quiet --cached; then
 	echo Aborting due to uncommitted changes in the index
@@ -47,5 +44,11 @@ else
 	git push origin $deploy_branch
 fi
 
-git symbolic-ref HEAD refs/heads/$previous_branch
+if [[ $previous_branch = "HEAD" ]]; then
+	#we weren't on any branch before, so just set HEAD back to the commit it was on
+	git update-ref --no-deref HEAD $commit_hash $deploy_branch
+else
+	git symbolic-ref HEAD refs/heads/$previous_branch
+fi
+
 git reset --mixed
