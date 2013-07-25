@@ -6,7 +6,7 @@ deploy_branch=gh-pages
 
 #if no user identity is already set in the current git environment, use this:
 default_username=deploy.sh
-default_email=XX1011+$default_user@gmail.com
+default_email=XX1011+deploy.sh@gmail.com
 
 #echo expanded commands as they are executed, in case something goes wrong
 set -o xtrace
