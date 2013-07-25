@@ -32,7 +32,7 @@ if ! git diff --exit-code --quiet --cached; then
 	exit 1
 fi
 
-git fetch origin $deploy_branch
+git fetch origin $deploy_branch:$deploy_branch
 
 #make deploy_branch the current branch
 git symbolic-ref HEAD refs/heads/$deploy_branch
