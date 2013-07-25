@@ -8,8 +8,10 @@ deploy_branch=gh-pages
 default_username=deploy.sh
 default_email=XX1011+deploy.sh@gmail.com
 
-#echo expanded commands as they are executed, in case something goes wrong
-set -o xtrace
+if [[ $1 = "-v" || $1 = "--verbose" ]]; then
+	#echo expanded commands as they are executed
+	set -o xtrace
+fi
 
 commit_title=`git log -n 1 --format="%s" HEAD`
 commit_hash=`git log -n 1 --format="%H" HEAD`
