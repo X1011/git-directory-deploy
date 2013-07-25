@@ -42,7 +42,8 @@ git --work-tree "$deploy_directory" reset --mixed --quiet
 
 git --work-tree "$deploy_directory" add --all
 
-case `git --work-tree "$deploy_directory" diff --exit-code --quiet HEAD` in
+diff=`git --work-tree "$deploy_directory" diff --exit-code --quiet HEAD`
+case $diff in
 	0) echo No changes to files in $deploy_directory. Skipping commit.;;
 	1)
 		set_user_id
@@ -50,7 +51,10 @@ case `git --work-tree "$deploy_directory" diff --exit-code --quiet HEAD` in
 			"publish: $commit_title"$'\n\n'"generated from commit $commit_hash"
 		git push origin $deploy_branch
 		;;
-	*) exit 1;;
+	*)
+		echo git diff exited with code $diff. Aborting.
+		exit $diff
+		;;
 esac
 
 if [[ $previous_branch = "HEAD" ]]; then
