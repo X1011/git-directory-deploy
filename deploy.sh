@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -e #abort if any command fails
+set -o errexit #abort if any command fails
 
 deploy_directory=dist
 deploy_branch=gh-pages
@@ -42,7 +42,10 @@ git --work-tree "$deploy_directory" reset --mixed --quiet
 
 git --work-tree "$deploy_directory" add --all
 
-diff=`git --work-tree "$deploy_directory" diff --exit-code --quiet HEAD`
+set +o errexit
+git --work-tree "$deploy_directory" diff --exit-code --quiet HEAD
+diff=$?
+set -o errexit
 case $diff in
 	0) echo No changes to files in $deploy_directory. Skipping commit.;;
 	1)
