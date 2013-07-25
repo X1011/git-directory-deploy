@@ -34,7 +34,7 @@ fi
 git symbolic-ref HEAD refs/heads/$deploy_branch
 
 #put the previously committed contents of deploy_branch branch into the index 
-git --work-tree "$deploy_directory" reset --mixed
+git --work-tree "$deploy_directory" reset --mixed --quiet
 
 git --work-tree "$deploy_directory" pull origin $deploy_branch
 git --work-tree "$deploy_directory" add --all
