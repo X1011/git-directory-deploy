@@ -6,7 +6,7 @@ deploy_branch=gh-pages
 
 #if no user identity is already set in the current git environment, use this:
 default_username=deploy.sh
-default_email=XX1011+deploy.sh@gmail.com
+default_email=
 
 if [[ $1 = "-v" || $1 = "--verbose" ]]; then
 	#echo expanded commands as they are executed
