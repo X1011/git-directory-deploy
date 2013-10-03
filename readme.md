@@ -1,11 +1,14 @@
 This is a script for deploying generated files to a git branch, such as when building a single-page app using [Yeoman](http://yeoman.io) and deploying to [GitHub Pages](http://pages.github.com). Unlike the [git-subtree approach](http://yeoman.io/deployment.html), it does not require the generated files be committed to the source branch. It keeps a linear history on the deploy branch and does not make superfluous commits or deploys when the generated files do not change.
 
+For an example of use, see [X1011/verge-mobile-bingo](https://github.com/X1011/verge-mobile-bingo).
+
 ## configuration
 Edit these variables at the top of the script to fit your project:
 
 - **deploy_directory**: root of the tree of files to deploy
 - **deploy_branch**: branch to commit files to and push to origin
 - **default_username**, **default_email**: identity to use for git commits if none is set already. Useful for CI servers.
+- **repo**: (optional) repository to deploy to. Must be readable and writable. The default of "origin" will not work on Travis CI, since it uses the read-only git protocol. In that case, it is recommended to store a [GitHub token](https://help.github.com/articles/creating-an-access-token-for-command-line-use) in a [secure environment variable](http://about.travis-ci.org/docs/user/build-configuration/#Secure-environment-variables) and use it in an HTTPS URL like this: <code>repo=https://$GITHUB_TOKEN@github.com/<i>user</i>/<i>repo</i>.git</code>
 
 ## setup
 This could be implemented in the script, but I don’t feel like doing it. Replace "dist" with your deploy_directory and "gh-pages" with your deploy_branch.
