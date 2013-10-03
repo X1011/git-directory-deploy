@@ -11,7 +11,7 @@ Edit these variables at the top of the script to fit your project:
 - **repo**: (optional) repository to deploy to. Must be readable and writable. The default of "origin" will not work on Travis CI, since it uses the read-only git protocol. In that case, it is recommended to store a [GitHub token](https://help.github.com/articles/creating-an-access-token-for-command-line-use) in a [secure environment variable](http://about.travis-ci.org/docs/user/build-configuration/#Secure-environment-variables) and use it in an HTTPS URL like this: <code>repo=https://$GITHUB_TOKEN@github.com/<i>user</i>/<i>repo</i>.git</code>
 
 ## setup
-This could be implemented in the script, but I don’t feel like doing it. Replace "dist" with your deploy_directory and "gh-pages" with your deploy_branch.
+Do this once to prepare your repository. This could be implemented in the script, but I don’t feel like doing it. Replace "dist" with your deploy_directory and "gh-pages" with your deploy_branch.
 
 1. `git --work-tree dist checkout --orphan gh-pages`
    - this will disconnect the gh-pages branch’s history from the current commit
@@ -23,6 +23,8 @@ This could be implemented in the script, but I don’t feel like doing it. Repla
 4. `git --work-tree dist commit -m "initial publish"`
 
 ## run
+Do this every time you want to deploy, or have your CI server do it.
+
 1. check out the branch or commit of the source you want to use. The script will use this commit to generate a message when it makes its own commit on the deploy branch.
 2. generate the files in `deploy_directory`
 3. make sure you have no uncommitted changes in git's index. The script will abort if you do. (It's ok to have uncommitted files in the work tree, the script does not touch the work tree.)
