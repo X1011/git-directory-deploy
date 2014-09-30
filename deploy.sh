@@ -78,7 +78,7 @@ if [ $setup ]; then
 fi
 
 if ! git diff --exit-code --quiet --cached; then
-	echo Aborting due to uncommitted changes in the index
+	echo Aborting due to uncommitted changes in the index >&2
 	exit 1
 fi
 
@@ -110,7 +110,7 @@ case $diff in
 		enable_expanded_output
 		;;
 	*)
-		echo git diff exited with code $diff. Aborting.
+		echo git diff exited with code $diff. Aborting. Staying on branch $deploy_branch so you can debug. To switch back to master, use: git symbolic-ref HEAD refs/heads/master && git reset --mixed >&2
 		exit $diff
 		;;
 esac
