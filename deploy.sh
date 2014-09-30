@@ -13,15 +13,15 @@ repo=origin
 
 # Parse arg flags
 while : ; do
-if [[ $1 = "-v" || $1 = "--verbose" ]]; then
-    verbose=true
-    shift
-elif [[ $1 = "-s" || $1 = "--setup" ]]; then
-    setup=true
-    shift
-else
-    break
-fi
+	if [[ $1 = "-v" || $1 = "--verbose" ]]; then
+		verbose=true
+		shift
+	elif [[ $1 = "-s" || $1 = "--setup" ]]; then
+		setup=true
+		shift
+	else
+		break
+	fi
 done
 
 #echo expanded commands as they are executed (for debugging)
@@ -40,25 +40,7 @@ function disable_expanded_output {
 	fi
 }
 
-function setup_repo {
-	mkdir -p $deploy_directory
-	git --work-tree $deploy_directory checkout --orphan $deploy_branch
-	git --work-tree $deploy_directory rm -r "*"
-	git --work-tree $deploy_directory add --all
-	git --work-tree $deploy_directory commit -m "initial publish"
-	git push origin $deploy_branch
-	git symbolic-ref HEAD refs/heads/master && git reset --mixed
-}
-
 enable_expanded_output
-
-if [ $setup ]; then
-	setup_repo
-	exit
-fi
-
-commit_title=`git log -n 1 --format="%s" HEAD`
-commit_hash=`git log -n 1 --format="%H" HEAD`
 
 function set_user_id {
 	if [[ -z `git config user.name` ]]; then
@@ -69,7 +51,20 @@ function set_user_id {
 	fi
 }
 
+commit_title=`git log -n 1 --format="%s" HEAD`
+commit_hash=`git log -n 1 --format="%H" HEAD`
 previous_branch=`git rev-parse --abbrev-ref HEAD`
+
+if [ $setup ]; then
+	mkdir -p $deploy_directory
+	git --work-tree $deploy_directory checkout --orphan $deploy_branch
+	git --work-tree $deploy_directory rm -r "*"
+	git --work-tree $deploy_directory add --all
+	git --work-tree $deploy_directory commit -m "initial publish"
+	git push origin $deploy_branch
+	git symbolic-ref HEAD refs/heads/master && git reset --mixed
+	exit
+fi
 
 if ! git diff --exit-code --quiet --cached; then
 	echo Aborting due to uncommitted changes in the index
