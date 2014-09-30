@@ -51,6 +51,17 @@ function set_user_id {
 	fi
 }
 
+function restore_head {
+	if [[ $previous_branch = "HEAD" ]]; then
+		#we weren't on any branch before, so just set HEAD back to the commit it was on
+		git update-ref --no-deref HEAD $commit_hash $deploy_branch
+	else
+		git symbolic-ref HEAD refs/heads/$previous_branch
+	fi
+	
+	git reset --mixed
+}
+
 commit_title=`git log -n 1 --format="%s" HEAD`
 commit_hash=`git log -n 1 --format="%H" HEAD`
 previous_branch=`git rev-parse --abbrev-ref HEAD`
@@ -60,9 +71,9 @@ if [ $setup ]; then
 	git --work-tree $deploy_directory checkout --orphan $deploy_branch
 	git --work-tree $deploy_directory rm -r "*"
 	git --work-tree $deploy_directory add --all
-	git --work-tree $deploy_directory commit -m "initial publish"
-	git push origin $deploy_branch
-	git symbolic-ref HEAD refs/heads/master && git reset --mixed
+	git --work-tree $deploy_directory commit -m "initial publish"$'\n\n'"generated from commit $commit_hash"
+	git push $repo $deploy_branch
+	restore_head
 	exit
 fi
 
@@ -104,11 +115,4 @@ case $diff in
 		;;
 esac
 
-if [[ $previous_branch = "HEAD" ]]; then
-	#we weren't on any branch before, so just set HEAD back to the commit it was on
-	git update-ref --no-deref HEAD $commit_hash $deploy_branch
-else
-	git symbolic-ref HEAD refs/heads/$previous_branch
-fi
-
-git reset --mixed
+restore_head
