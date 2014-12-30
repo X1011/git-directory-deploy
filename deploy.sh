@@ -24,6 +24,11 @@ while : ; do
 	fi
 done
 
+if ! find "$deploy_directory" -mindepth 1 -print -quit 2>/dev/null | grep -q .; then
+	echo "Deploy dir '$deploy_directory' is empty, please make sure it has content." >&2
+	exit 1
+fi
+
 #echo expanded commands as they are executed (for debugging)
 function enable_expanded_output {
 	if [ $verbose ]; then
