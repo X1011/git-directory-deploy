@@ -19,6 +19,9 @@ while : ; do
 	elif [[ $1 = "-s" || $1 = "--setup" ]]; then
 		setup=true
 		shift
+	elif [[ $1 = "-e" || $1 = "--allow-empty" ]]; then
+		allow_empty=true
+		shift
 	else
 		break
 	fi
@@ -84,6 +87,11 @@ fi
 
 if [ ! -d "$deploy_directory" ]; then
 	echo "Deploy directory '$deploy_directory' does not exist. Aborting." >&2
+	exit 1
+fi
+
+if [[ -z `ls -A "$deploy_directory" 2> /dev/null` && -z $allow_empty ]]; then
+	echo "Deploy directory '$deploy_directory' is empty. Aborting. If you're sure you want to deploy an empty tree, use the -e flag." >&2
 	exit 1
 fi
 
