@@ -24,11 +24,6 @@ while : ; do
 	fi
 done
 
-if [ ! -d "$deploy_directory" ]; then
-	echo "Deploy directory '$deploy_directory' does not exist. Aborting." >&2
-	exit 1
-fi
-
 #echo expanded commands as they are executed (for debugging)
 function enable_expanded_output {
 	if [ $verbose ]; then
@@ -84,6 +79,11 @@ fi
 
 if ! git diff --exit-code --quiet --cached; then
 	echo Aborting due to uncommitted changes in the index >&2
+	exit 1
+fi
+
+if [ ! -d "$deploy_directory" ]; then
+	echo "Deploy directory '$deploy_directory' does not exist. Aborting." >&2
 	exit 1
 fi
 
