@@ -25,5 +25,6 @@ Do this every time you want to deploy, or have your CI server do it.
 ### options
 `-v`, `--verbose`: echo commands as they are executed. It is recommended to enable this when running on a CI server, so you can debug if something goes wrong.
 
+`-s`, `--setup`: perform one-time setup to prepare the repo for deployments. Creates `deploy_branch`, initializes it with the contents of `deploy_directory`, and pushes it to `repo`.
 
-> Written with [StackEdit](http://benweet.github.io/stackedit).
+`-e`, `--allow-empty`: allow deployment of an empty directory. By default, the script will abort if `deploy_directory` is empty.
