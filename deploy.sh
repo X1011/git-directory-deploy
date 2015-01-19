@@ -65,6 +65,11 @@ function restore_head {
 	git reset --mixed
 }
 
+if ! git diff --exit-code --quiet --cached; then
+	echo Aborting due to uncommitted changes in the index >&2
+	exit 1
+fi
+
 commit_title=`git log -n 1 --format="%s" HEAD`
 commit_hash=`git log -n 1 --format="%H" HEAD`
 previous_branch=`git rev-parse --abbrev-ref HEAD`
@@ -78,11 +83,6 @@ if [ $setup ]; then
 	git push $repo $deploy_branch
 	restore_head
 	exit
-fi
-
-if ! git diff --exit-code --quiet --cached; then
-	echo Aborting due to uncommitted changes in the index >&2
-	exit 1
 fi
 
 if [ ! -d "$deploy_directory" ]; then
