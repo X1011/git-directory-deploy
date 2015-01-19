@@ -70,11 +70,11 @@ commit_hash=`git log -n 1 --format="%H" HEAD`
 previous_branch=`git rev-parse --abbrev-ref HEAD`
 
 if [ $setup ]; then
-	mkdir -p $deploy_directory
-	git --work-tree $deploy_directory checkout --orphan $deploy_branch
-	git --work-tree $deploy_directory rm -r "*"
-	git --work-tree $deploy_directory add --all
-	git --work-tree $deploy_directory commit -m "initial publish"$'\n\n'"generated from commit $commit_hash"
+	mkdir -p "$deploy_directory"
+	git --work-tree "$deploy_directory" checkout --orphan $deploy_branch
+	git --work-tree "$deploy_directory" rm -r "*"
+	git --work-tree "$deploy_directory" add --all
+	git --work-tree "$deploy_directory" commit -m "initial publish"$'\n\n'"generated from commit $commit_hash"
 	git push $repo $deploy_branch
 	restore_head
 	exit
