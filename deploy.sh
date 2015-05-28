@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
 set -o errexit #abort if any command fails
 
-deploy_directory=dist
-deploy_branch=gh-pages
+deploy_directory=${GIT_DEPLOY_DIR:-dist}
+deploy_branch=${GIT_DEPLOY_BRANCH:-gh-pages}
 
 #if no user identity is already set in the current git environment, use this:
-default_username=deploy.sh
-default_email=
+default_username=${GIT_DEPLOY_USERNAME:-deploy.sh}
+default_email=${GIT_DEPLOY_EMAIL:-}
 
 #repository to deploy to. must be readable and writable.
-repo=origin
+repo=${GIT_DEPLOY_REPO:-origin}
 
 # Parse arg flags
 while : ; do
