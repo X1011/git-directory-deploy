@@ -1,0 +1,8 @@
+dependencies:
+    post:
+        - sudo add-apt-repository ppa:duggan/bats --yes
+        - sudo apt-get update; sudo apt-get install bats # try install even if update fails
+
+test:
+    post:
+        - bats test.bats
