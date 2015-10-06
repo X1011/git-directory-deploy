@@ -1,5 +1,8 @@
 #!/usr/bin/env bats
 
+[ `git config user.name`  ] || git config user.name  test
+[ `git config user.email` ] || git config user.email test
+
 @test setup succeeds {
 	local tmp=`mktemp --tmpdir --directory deploy_test.XXXX`
 	local deploy="`pwd`/deploy.sh"
@@ -9,7 +12,7 @@
 	git remote add origin .
 	touch test
 	git add test
-	GIT_AUTHOR_NAME=test GIT_AUTHOR_EMAIL=test git commit --message=test
+	git commit --message=test
 
 	mkdir dist
 	touch dist/test.min
