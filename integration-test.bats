@@ -6,10 +6,10 @@ setup() {
 	pushd "$tmp"
 }
 
-@test setup succeeds {
+@test 'setup and deployment succeed' {
 	git init
-	[ `git config user.name`  ] || git config user.name  test
-	[ `git config user.email` ] || git config user.email test
+	[[ `git config user.name`  ]] || git config user.name  test
+	[[ `git config user.email` ]] || git config user.email test
 	git remote add origin .
 
 	touch test
@@ -22,6 +22,13 @@ setup() {
 	"$deploy" --setup
 
 	[[ `git rev-parse --abbrev-ref HEAD` = master ]]
+
+	"$deploy"
+
+	[[ `git rev-parse --abbrev-ref HEAD` = master ]]
+	git checkout gh-pages
+	[ -f test.min ]
+	[ ! -e test ]
 }
 
 teardown() {
