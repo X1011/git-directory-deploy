@@ -9,7 +9,7 @@
 	git remote add origin .
 	touch test
 	git add test
-	GIT_AUTHOR_NAME=test GIT_COMMITTER_EMAIL=test git commit --message=test
+	GIT_AUTHOR_NAME=test GIT_AUTHOR_EMAIL=test git commit --message=test
 
 	mkdir dist
 	touch dist/test.min
