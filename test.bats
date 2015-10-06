@@ -1,10 +1,12 @@
 #!/usr/bin/env bats
 
-@test setup succeeds {
-	local tmp=`mktemp --tmpdir --directory deploy_test.XXXX`
-	local deploy="`pwd`/deploy.sh"
+setup() {
+	tmp=`mktemp --tmpdir --directory deploy_test.XXXX`
+	deploy="`pwd`/deploy.sh"
 	pushd "$tmp"
+}
 
+@test setup succeeds {
 	git init
 	[ `git config user.name`  ] || git config user.name  test
 	[ `git config user.email` ] || git config user.email test
@@ -19,8 +21,10 @@
 
 	"$deploy" --setup
 
+	[[ `git rev-parse --abbrev-ref HEAD` = master ]]
+}
+
+teardown() {
 	popd
 	rm -rf "$tmp"
-
-	[[ `git rev-parse --abbrev-ref HEAD` = master ]]
 }
