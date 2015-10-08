@@ -19,9 +19,9 @@ repo=https://secret@github.com/user/repo.git
 }
 
 @test 'filter filters repo embedded in string' {
-	assert that `echo 1$repo2 | filter` = '1$repo2'
+	assert that `echo 1${repo}2 | filter` = '1$repo2'
 }
 
 @test 'filter filters repo multiple times' {
-	assert that `echo 1$repo2$repo3 | filter` = '1$repo2$repo3'
+	assert that `echo 1${repo}2${repo}3 | filter` = '1$repo2$repo3'
 }
