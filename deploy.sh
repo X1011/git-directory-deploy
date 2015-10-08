@@ -132,4 +132,8 @@ restore_head() {
 	git reset --mixed
 }
 
-main "$@"
+filter() {
+	sed -e "s|$repo|\$repo|g"
+}
+
+[[ $1 = --source-only ]] || main "$@"
