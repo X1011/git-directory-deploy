@@ -25,3 +25,11 @@ repo=https://secret@github.com/user/repo.git
 @test 'filter filters repo multiple times' {
 	assert that `echo 1${repo}2${repo}3 | filter` = '1$repo2$repo3'
 }
+
+@test 'sanitize sanitizes stdout' {
+	assert that `sanitize echo $repo` = '$repo'
+}
+
+@test 'sanitize sanitizes stderr' {
+	assert that `sanitize fail $repo 2>&1` = '$repo'
+}
