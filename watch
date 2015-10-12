@@ -2,12 +2,8 @@
 
 # uses entr to watch for changes: http://entrproject.org
 
-# since the 1st entr process is running in the background, it won't recieve the interrupt signal from the user, so we'll kill it once the user interrupts the 2nd entr process running in the foreground
-trap 'kill $pid' SIGINT
-
 # re-run any individual .bats file when it changes. -p to postpone the first execution, since the 2nd entr command below will run all the .bats files.
 ls *.bats | entr -p bats /_ &
-pid=$!
 
 # re-run all tests when the script under test changes.
 echo deploy.sh | entr bats *.bats
