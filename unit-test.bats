@@ -3,11 +3,18 @@
 source lib/batslib.bash
 
 assert() {
-	assert_equal $2 $4
+	case ${@:2} in  # skip 1st argument
+		*' = '*) assert_equal $2 "${*:4}" ;;
+		'output contains '*) assert_output -p "${*:4}" ;;
+	esac
 }
 
-@test 'assert works' {
+@test 'assert asserts equality' {
 	assert that 1 = 1
+}
+@test '       asserts output content' {
+	run echo abc
+	assert that output contains b
 }
 
 source deploy.sh --source-only
