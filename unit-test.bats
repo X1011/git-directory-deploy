@@ -3,9 +3,12 @@
 source lib/batslib.bash
 
 assert() {
-	case ${@:2} in  # skip 1st argument
-		*' = '*) assert_equal $2 "${*:4}" ;;
-		'output contains '*) assert_output -p "${*:4}" ;;
+	[[ $1 = that ]] && shift
+	
+	case $@ in
+		*' = '*) assert_equal $1 "${*:3}" ;;
+		'output contains '*) assert_output -p "${*:3}" ;;
+		*) fail invalid assertion: $@
 	esac
 }
 
