@@ -45,3 +45,8 @@ repo=https://secret@github.com/user/repo.git
 @test '         sanitizes stderr' {
 	assert that `sanitize fail $repo 2>&1` = '$repo'
 }
+@test '         sanitizes xtrace' {
+	output=$(set -o xtrace && sanitize echo $repo)
+	assert that output contains '$repo'
+	assert that output does not contain secret
+}
