@@ -8,6 +8,7 @@ assert() {
 	case $@ in
 		*' = '*) assert_equal $1 "${*:3}" ;;
 		'output contains '*) assert_output -p "${*:3}" ;;
+		'output does not contain '*) refute_output -p "${*:5}" ;;
 		*) fail invalid assertion: $@
 	esac
 }
@@ -18,6 +19,10 @@ assert() {
 @test '       asserts output content' {
 	run echo abc
 	assert that output contains b
+}
+@test '       refutes output content' {
+	run echo abc
+	assert that output does not contain d
 }
 
 source deploy.sh --source-only
