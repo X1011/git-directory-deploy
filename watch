@@ -6,4 +6,4 @@
 ls *.bats | entr -p bats /_ &
 
 # re-run all tests when the script under test changes.
-echo deploy.sh | entr bats *.bats
+echo deploy.sh | entr bats .
