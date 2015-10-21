@@ -2,7 +2,6 @@
 
 setup() {
 	tmp=`mktemp --tmpdir --directory deploy_test.XXXX`
-	deploy="`pwd`/deploy.sh"
 	pushd "$tmp"
 }
 teardown() {
@@ -20,6 +19,8 @@ create_repo() {
 	git commit --message=test
 }
 
+source deploy.sh --source-only
+
 @test 'setup and deployment succeed' {
 	create_repo
 	git remote add origin . # just 'deploy' to this repo itself, for easy testing
@@ -27,7 +28,7 @@ create_repo() {
 	mkdir dist
 	touch dist/test.min
 
-	"$deploy" --setup
+	main --setup
 
 	[[ `git rev-parse --abbrev-ref HEAD` = master ]]
 	git checkout gh-pages
@@ -38,7 +39,7 @@ create_repo() {
 	git checkout master
 	mv dist/test.min dist/test2.min
 
-	"$deploy"
+	main
 
 	[[ `git rev-parse --abbrev-ref HEAD` = master ]]
 	git checkout gh-pages

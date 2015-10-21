@@ -32,7 +32,7 @@ main() {
 
 	if ! git diff --exit-code --quiet --cached; then
 		echo Aborting due to uncommitted changes in the index >&2
-		exit 1
+		return 1
 	fi
 
 	commit_title=`git log -n 1 --format="%s" HEAD`
@@ -47,17 +47,17 @@ main() {
 		git --work-tree "$deploy_directory" commit -m "initial publish"$'\n\n'"generated from commit $commit_hash"
 		git push $repo $deploy_branch
 		restore_head
-		exit
+		return
 	fi
 
 	if [ ! -d "$deploy_directory" ]; then
 		echo "Deploy directory '$deploy_directory' does not exist. Aborting." >&2
-		exit 1
+		return 1
 	fi
 
 	if [[ -z `ls -A "$deploy_directory" 2> /dev/null` && -z $allow_empty ]]; then
 		echo "Deploy directory '$deploy_directory' is empty. Aborting. If you're sure you want to deploy an empty tree, use the -e flag." >&2
-		exit 1
+		return 1
 	fi
 
 	disable_expanded_output
@@ -89,7 +89,7 @@ main() {
 			;;
 		*)
 			echo git diff exited with code $diff. Aborting. Staying on branch $deploy_branch so you can debug. To switch back to master, use: git symbolic-ref HEAD refs/heads/master && git reset --mixed >&2
-			exit $diff
+			return $diff
 			;;
 	esac
 
