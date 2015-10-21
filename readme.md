@@ -25,7 +25,7 @@ Do this every time you want to deploy, or have your CI server do it.
 5. run `./deploy.sh`
 
 ### options
-`-v`, `--verbose`: echo commands as they are executed. It is recommended to enable this when running on a CI server, so you can debug if something goes wrong.
+`-v`, `--verbose`: echo expanded commands as they are executed, using the xtrace option. This can be useful for debugging, as the output will include the values of variables that are being used, such as $commit_title and $deploy_directory. However, the script makes special effort to not output the value of $repo, as it may contain a secret authentication token.
 
 `-s`, `--setup`: perform one-time setup to prepare the repo for deployments. Creates `deploy_branch`, initializes it with the contents of `deploy_directory`, and pushes it to `repo`.
 
