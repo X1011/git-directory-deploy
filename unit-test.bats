@@ -46,5 +46,6 @@ repo=https://secret@github.com/user/repo.git
 	assert that `sanitize fail $repo 2>&1` = '$repo'
 }
 @test '         sanitizes xtrace' {
+	skip
 	assert that `(set -o xtrace && sanitize echo $repo)` = $'+ echo $repo\n $repo'
 }
