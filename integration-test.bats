@@ -5,16 +5,24 @@ setup() {
 	deploy="`pwd`/deploy.sh"
 	pushd "$tmp"
 }
+teardown() {
+	popd
+	rm -rf "$tmp"
+}
 
-@test 'setup and deployment succeed' {
+create_repo() {
 	git init
 	[[ `git config user.name`  ]] || git config user.name  test
 	[[ `git config user.email` ]] || git config user.email test
-	git remote add origin . # just 'deploy' to this repo itself, for easy testing
 
 	touch test
 	git add test
 	git commit --message=test
+}
+
+@test 'setup and deployment succeed' {
+	create_repo
+	git remote add origin . # just 'deploy' to this repo itself, for easy testing
 
 	mkdir dist
 	touch dist/test.min
@@ -36,9 +44,4 @@ setup() {
 	git checkout gh-pages
 	[[ -f test2.min ]]
 	[[ ! -e test.min ]]
-}
-
-teardown() {
-	popd
-	rm -rf "$tmp"
 }
