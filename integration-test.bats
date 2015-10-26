@@ -3,6 +3,7 @@
 setup() {
 	tmp=`mktemp --tmpdir --directory deploy_test.XXXX`
 	pushd "$tmp"
+	create_repo
 }
 teardown() {
 	popd
@@ -11,38 +12,52 @@ teardown() {
 
 create_repo() {
 	git init
+	
 	[[ `git config user.name`  ]] || git config user.name  test
 	[[ `git config user.email` ]] || git config user.email test
-
-	touch test
-	git add test
-	git commit --message=test
+	git commit --allow-empty --message=empty
+	
+	git remote add origin . # just "deploy" to this repo itself, for easy testing
+	mkdir dist
+	touch dist/file
 }
 
 source deploy.sh --source-only
 
-@test 'setup and deployment succeed' {
-	create_repo
-	git remote add origin . # just 'deploy' to this repo itself, for easy testing
-
-	mkdir dist
-	touch dist/test.min
-
-	main --setup
-
-	[[ `git rev-parse --abbrev-ref HEAD` = master ]]
-	git checkout gh-pages
-	[[ -f test.min ]] # test.min is a normal file
-	[[ ! -e test ]] # test does not exist
-	
-	
-	git checkout master
-	mv dist/test.min dist/test2.min
+@test "script creates branch and deploys file" {
 
 	main
 
-	[[ `git rev-parse --abbrev-ref HEAD` = master ]]
-	git checkout gh-pages
-	[[ -f test2.min ]]
-	[[ ! -e test.min ]]
+	git cat-file -e gh-pages:file # `file` exists on gh-pages
+}
+
+@test "       deploys file to existing branch" {
+	git branch gh-pages
+
+	main
+
+	git cat-file -e gh-pages:file # `file` exists on gh-pages
+}
+
+@test "       doesn't clobber files in deploy directory" {
+	echo source > file
+	echo dist > dist/file
+	git add file
+	git commit --message=file
+
+	main
+	
+	[[ `cat dist/file` = dist ]]
+	[[ `git cat-file gh-pages:file` = dist ]]
+}
+
+@test "       doesn't deploy source file" {
+	touch source
+	git add source
+	git commit --message='source file'
+	
+	main
+	
+	[[ -z `ls --almost-all dist 2> /dev/null` ]] # no files in dist
+	! git cat-file -e gh-pages:source # `source` does not exist on gh-pages
 }

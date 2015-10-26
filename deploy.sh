@@ -17,9 +17,6 @@ main() {
 		if [[ $1 = "-v" || $1 = "--verbose" ]]; then
 			verbose=true
 			shift
-		elif [[ $1 = "-s" || $1 = "--setup" ]]; then
-			setup=true
-			shift
 		elif [[ $1 = "-e" || $1 = "--allow-empty" ]]; then
 			allow_empty=true
 			shift
@@ -36,19 +33,8 @@ main() {
 	fi
 
 	commit_title=`git log -n 1 --format="%s" HEAD`
-	commit_hash=`git log -n 1 --format="%H" HEAD`
+	commit_hash=` git log -n 1 --format="%H" HEAD`
 	previous_branch=`git rev-parse --abbrev-ref HEAD`
-
-	if [ $setup ]; then
-		mkdir -p "$deploy_directory"
-		git --work-tree "$deploy_directory" checkout --orphan $deploy_branch
-		git --work-tree "$deploy_directory" rm -r "*"
-		git --work-tree "$deploy_directory" add --all
-		git --work-tree "$deploy_directory" commit -m "initial publish"$'\n\n'"generated from commit $commit_hash"
-		git push $repo $deploy_branch
-		restore_head
-		return
-	fi
 
 	if [ ! -d "$deploy_directory" ]; then
 		echo "Deploy directory '$deploy_directory' does not exist. Aborting." >&2
@@ -60,15 +46,28 @@ main() {
 		return 1
 	fi
 
-	disable_expanded_output
-	git fetch --force $repo $deploy_branch:$deploy_branch
-	enable_expanded_output
+	if git ls-remote --exit-code $repo "refs/heads/$deploy_branch" ; then
+		disable_expanded_output
+		git fetch --force $repo $deploy_branch:$deploy_branch
+		enable_expanded_output
+	fi
 
-	#make deploy_branch the current branch
-	git symbolic-ref HEAD refs/heads/$deploy_branch
+	if git show-ref --verify --quiet "refs/heads/$deploy_branch" ; then
+		#read-tree
+		
+		#make deploy_branch the current branch
+		git symbolic-ref HEAD refs/heads/$deploy_branch
 
-	#put the previously committed contents of deploy_branch branch into the index
-	git --work-tree "$deploy_directory" reset --mixed --quiet
+		#put the previously committed contents of deploy_branch into the index
+		git --work-tree "$deploy_directory" reset --mixed --quiet
+	else
+		# deploy_branch doesn't exist; create it
+		#read-tree --empty?
+		#write-tree
+		#commit-tree
+		git --work-tree "$deploy_directory" checkout --orphan $deploy_branch
+		git --work-tree "$deploy_directory" rm -r "*"
+	fi
 
 	git --work-tree "$deploy_directory" add --all
 
