@@ -24,14 +24,14 @@ create_repo() {
 
 source deploy.sh --source-only
 
-@test "script creates branch and deploys file" {
+@test "deploy creates branch and deploys file" {
 
 	main
 
 	git cat-file -e gh-pages:file # `file` exists on gh-pages
 }
 
-@test "       deploys file to existing branch" {
+@test "       deploys new file to existing branch" {
 	git branch gh-pages
 
 	main
@@ -39,7 +39,26 @@ source deploy.sh --source-only
 	git cat-file -e gh-pages:file # `file` exists on gh-pages
 }
 
-@test "       doesn't clobber files in deploy directory" {
+@test "       updates existing file" {
+	main
+	echo updated > dist/file
+
+	main
+	
+	[[ `git cat-file blob gh-pages:file` = updated ]]
+}
+
+@test "       removes missing file" {
+	main
+	rm dist/file
+	
+	main --allow-empty
+
+	! git cat-file -e gh-pages:file # `file` does not exist on gh-pages
+}
+
+@test "       doesn't clobber file in deploy directory" {
+	# make sure that a source file doesn't overwrite a deploy file with the same name
 	echo source > file
 	echo dist > dist/file
 	git add file
@@ -48,7 +67,7 @@ source deploy.sh --source-only
 	main
 	
 	[[ `cat dist/file` = dist ]]
-	[[ `git cat-file gh-pages:file` = dist ]]
+	[[ `git cat-file blob gh-pages:file` = dist ]]
 }
 
 @test "       doesn't deploy source file" {
