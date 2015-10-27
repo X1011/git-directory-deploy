@@ -2,8 +2,10 @@
 
 # uses entr to watch for changes: http://entrproject.org
 
-# re-run any individual .bats file when it changes. -p to postpone the first execution, since the 2nd entr command below will run all the .bats files.
-ls *.bats | entr -p bats /_ &
+# re-run any individual .bats file when it changes. -p to postpone the first execution, since the commands below will run all the .bats files.
+shopt -s globstar
+ls **/*.bats | entr -p bats /_ &
 
-# re-run all tests when the script under test changes.
-echo deploy.sh | entr bats .
+# re-run relevant tests when a source file changes.
+echo deploy.sh | entr bats . &
+ls  lib/*.bash | entr bats lib

@@ -1,30 +1,6 @@
 #!/usr/bin/env bats
 
-source lib/batslib.bash
-
-assert() {
-	[[ $1 = that ]] && shift
-	
-	case $@ in
-		*' = '*) assert_equal $1 "${*:3}" ;;
-		'output contains '*) assert_output -p "${*:3}" ;;
-		'output does not contain '*) refute_output -p "${*:5}" ;;
-		*) fail invalid assertion: $@
-	esac
-}
-
-@test 'assert asserts equality' {
-	assert that 1 = 1
-}
-@test '       asserts output content' {
-	run echo abc
-	assert that output contains b
-}
-@test '       refutes output content' {
-	run echo abc
-	assert that output does not contain d
-}
-
+source lib/assert.bash
 source deploy.sh --source-only
 
 repo=https://secret@github.com/user/repo.git
