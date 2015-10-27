@@ -1,5 +1,8 @@
 #!/usr/bin/env bats
 
+source lib/assert.bash
+source deploy.sh --source-only
+
 setup() {
 	tmp=`mktemp --tmpdir --directory deploy_test.XXXX`
 	pushd "$tmp" >/dev/null
@@ -21,8 +24,6 @@ create_repo() {
 	mkdir dist
 	touch dist/file
 }
-
-source deploy.sh --source-only
 
 @test "deploy creates branch and deploys file" {
 
@@ -77,6 +78,6 @@ source deploy.sh --source-only
 	
 	main
 	
-	[[ -z `ls --almost-all dist 2> /dev/null` ]] # no files in dist
+	assert that `ls --almost-all dist` = file
 	! git cat-file -e gh-pages:source # `source` does not exist on gh-pages
 }
