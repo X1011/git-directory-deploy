@@ -2,11 +2,11 @@
 
 setup() {
 	tmp=`mktemp --tmpdir --directory deploy_test.XXXX`
-	pushd "$tmp"
+	pushd "$tmp" >/dev/null
 	create_repo
 }
 teardown() {
-	popd
+	popd >/dev/null
 	rm -rf "$tmp"
 }
 
