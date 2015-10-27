@@ -41,8 +41,8 @@ main() {
 		return 1
 	fi
 
-	if [[ -z `ls -A "$deploy_directory" 2> /dev/null` && -z $allow_empty ]]; then
-		echo "Deploy directory '$deploy_directory' is empty. Aborting. If you're sure you want to deploy an empty tree, use the -e flag." >&2
+	if [[ -z `ls --almost-all "$deploy_directory" 2> /dev/null` && -z $allow_empty ]]; then
+		echo "Deploy directory '$deploy_directory' is empty. Aborting. If you're sure you want to deploy an empty tree, use the --allow-empty / -e flag." >&2
 		return 1
 	fi
 
