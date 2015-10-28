@@ -7,5 +7,5 @@ shopt -s globstar
 ls **/*.bats | entr -p bats /_ &
 
 # re-run relevant tests when a source file changes.
-echo deploy.sh | entr bats . &
-ls  lib/*.bash | entr bats lib
+echo deploy.sh | entr -p bats . &
+ls lib/*.bash | entr bats lib .
