@@ -5,6 +5,9 @@ load assert
 @test 'assert asserts equality' {
 	assert that 1 = 1
 }
+@test '       asserts equality with spaces' {
+	assert that 'a b' = a b
+}
 @test '       asserts output content' {
 	run echo abc
 	assert that output contains b

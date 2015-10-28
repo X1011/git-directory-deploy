@@ -23,5 +23,5 @@ repo=https://secret@github.com/user/repo.git
 }
 @test '         sanitizes xtrace' {
 	skip
-	assert that `(set -o xtrace && sanitize echo $repo)` = $'+ echo $repo\n $repo'
+	assert that "`(set -o xtrace && sanitize echo $repo)`" = $'+ echo $repo\n $repo'
 }
