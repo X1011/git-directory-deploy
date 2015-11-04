@@ -46,7 +46,7 @@ main() {
 		return 1
 	fi
 
-	if git ls-remote --exit-code $repo "refs/heads/$deploy_branch" ; then
+	if sanitize git ls-remote --exit-code $repo "refs/heads/$deploy_branch" ; then
 		# deploy_branch exists in $repo; make sure we have the latest version
 		
 		disable_expanded_output
@@ -141,6 +141,7 @@ filter() {
 }
 
 sanitize() {
+	     # redirect stderr to filter, then redirect the result back to stderr
 	"$@" 2> >(filter 1>&2) | filter
 }
 

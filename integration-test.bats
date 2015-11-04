@@ -25,6 +25,18 @@ create_repo() {
 	touch dist/file
 }
 
+@test "       doesn't reveal secret in \$repo" {
+	GIT_DEPLOY_REPO=https://secret@example.com/repo.git run main #--verbose
+	# and it should detect the invalid repo during ls-remote and not continue on, so this should be the only output:
+	assert that "$output" = "fatal: repository '\$repo' not found"
+}
+
+@test "       doesn't reveal secret in configured remote" {
+	git remote set-url origin https://secret@example.com/repo.git
+	#--verbose
+	assert that "`main`" = "fatal: repository '\$repo' not found"
+}
+
 @test "deploy creates branch and deploys file" {
 
 	main
