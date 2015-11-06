@@ -22,6 +22,10 @@ Do this every time you want to deploy, or have your CI server do it.
 5. run `./deploy.sh`
 
 ### options
+`-m`, `--message <message>`: specify message to be used for the commit on `deploy_branch`. By default, the message is the title of the source commit, prepended with 'publish: '.
+
+`-n`, `--no-hash`: don't append the hash of the source commit to the commit message on `deploy_branch`. By default, the hash will be appended in a new paragraph, regardless of whether a message was specified with `-m`.
+
 `-v`, `--verbose`: echo expanded commands as they are executed, using the xtrace option. This can be useful for debugging, as the output will include the values of variables that are being used, such as $commit_title and $deploy_directory. However, the script makes special effort to not output the value of $repo, as it may contain a secret authentication token.
 
 `-e`, `--allow-empty`: allow deployment of an empty directory. By default, the script will abort if `deploy_directory` is empty.
