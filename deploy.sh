@@ -12,6 +12,9 @@ main() {
 	#repository to deploy to. must be readable and writable.
 	repo=${GIT_DEPLOY_REPO:-origin}
 	
+	#append commit hash to the end of message by default
+	append_hash=true
+	
 	# Parse arg flags
 	while : ; do
 		if [[ $1 = "-v" || $1 = "--verbose" ]]; then
@@ -19,6 +22,12 @@ main() {
 			shift
 		elif [[ $1 = "-e" || $1 = "--allow-empty" ]]; then
 			allow_empty=true
+			shift
+		elif [[ ( $1 = "-m" || $1 = "--message" ) && -n $2 ]]; then
+			commit_message=$2
+			shift 2
+		elif [[ $1 = "-n" || $1 = "--no-hash" ]]; then
+			append_hash=false
 			shift
 		else
 			break
@@ -34,6 +43,17 @@ main() {
 
 	commit_title=`git log -n 1 --format="%s" HEAD`
 	commit_hash=` git log -n 1 --format="%H" HEAD`
+	
+	#default commit message uses last title if a custom one is not supplied
+	if [[ -z $commit_message ]]; then
+		commit_message="publish: $commit_title"
+	fi
+	
+	#append hash to commit message unless no hash flag was found
+	if [ $append_hash = true ]; then
+		commit_message="$commit_message"$'\n\n'"generated from commit $commit_hash"
+	fi
+		
 	previous_branch=`git rev-parse --abbrev-ref HEAD`
 
 	if [ ! -d "$deploy_directory" ]; then
@@ -91,8 +111,7 @@ incremental_deploy() {
 
 commit+push() {
 	set_user_id
-	git --work-tree "$deploy_directory" commit -m \
-		"publish: $commit_title"$'\n\n'"generated from commit $commit_hash"
+	git --work-tree "$deploy_directory" commit -m "$commit_message"
 
 	disable_expanded_output
 	#--quiet is important here to avoid outputting the repo URL, which may contain a secret token
