@@ -2,19 +2,11 @@
 set -o errexit #abort if any command fails
 
 main() {
-	deploy_directory=${GIT_DEPLOY_DIR:-dist}
-	deploy_branch=${GIT_DEPLOY_BRANCH:-gh-pages}
+	# Set args from a local environment file.
+	if [ -e ".env" ]; then
+		source .env
+	fi
 
-	#if no user identity is already set in the current git environment, use this:
-	default_username=${GIT_DEPLOY_USERNAME:-deploy.sh}
-	default_email=${GIT_DEPLOY_EMAIL:-}
-
-	#repository to deploy to. must be readable and writable.
-	repo=${GIT_DEPLOY_REPO:-origin}
-	
-	#append commit hash to the end of message by default
-	append_hash=true
-	
 	# Parse arg flags
 	while : ; do
 		if [[ $1 = "-v" || $1 = "--verbose" ]]; then
@@ -29,10 +21,27 @@ main() {
 		elif [[ $1 = "-n" || $1 = "--no-hash" ]]; then
 			append_hash=false
 			shift
+		elif [[ ( $1 = "-c" || $1 = "--config-file" ) ]]; then
+			source "$2"
+			shift 2
 		else
 			break
 		fi
 	done
+
+	# Set default options
+	deploy_directory=${GIT_DEPLOY_DIR:-dist}
+	deploy_branch=${GIT_DEPLOY_BRANCH:-gh-pages}
+
+	#if no user identity is already set in the current git environment, use this:
+	default_username=${GIT_DEPLOY_USERNAME:-deploy.sh}
+	default_email=${GIT_DEPLOY_EMAIL:-}
+
+	#repository to deploy to. must be readable and writable.
+	repo=${GIT_DEPLOY_REPO:-origin}
+	
+	#append commit hash to the end of message by default
+	append_hash=true
 	
 	enable_expanded_output
 
