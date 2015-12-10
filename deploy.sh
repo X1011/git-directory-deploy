@@ -21,7 +21,7 @@ main() {
 		elif [[ $1 = "-n" || $1 = "--no-hash" ]]; then
 			append_hash=false
 			shift
-		elif [[ ( $1 = "-c" || $1 = "--config-file" ) ]]; then
+		elif [[ $1 = "-c" || $1 = "--config-file" ]]; then
 			source "$2"
 			shift 2
 		else
