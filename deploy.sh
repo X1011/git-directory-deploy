@@ -7,6 +7,9 @@ main() {
 		source .env
 	fi
 
+	#append commit hash to the end of message by default
+	append_hash=true
+
 	# Parse arg flags
 	while : ; do
 		if [[ $1 = "-v" || $1 = "--verbose" ]]; then
@@ -39,9 +42,6 @@ main() {
 
 	#repository to deploy to. must be readable and writable.
 	repo=${GIT_DEPLOY_REPO:-origin}
-	
-	#append commit hash to the end of message by default
-	append_hash=true
 	
 	enable_expanded_output
 
