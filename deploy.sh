@@ -8,7 +8,7 @@ main() {
 	fi
 
 	#append commit hash to the end of message by default
-	append_hash=true
+	append_hash=${GIT_DEPLOY_APPEND_HASH:-true}
 
 	# Parse arg flags
 	while : ; do
