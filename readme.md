@@ -21,9 +21,9 @@ You can also define any of variables using environment variables and configurati
 The script will set these variables in this order of preference:
 
 1. Defaults set in the script itself.
-* Environment variables.
-* `.env` file in the path where you're running the script.
-* File specified on the command-line (see the `-c` option below).
+2. Environment variables.
+3. `.env` file in the path where you're running the script.
+4. File specified on the command-line (see the `-c` option below).
 
 Whatever values set later in this list will override those set earlier.
 
