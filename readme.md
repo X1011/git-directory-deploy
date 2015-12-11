@@ -17,7 +17,6 @@ You can also define any of variables using environment variables and configurati
 - `GIT_DEPLOY_DIR`
 - `GIT_DEPLOY_BRANCH`
 - `GIT_DEPLOY_REPO`
-- `GIT_DEPLOY_APPEND_HASH`
 
 The script will set these variables in this order of preference:
 
