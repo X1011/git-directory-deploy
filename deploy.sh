@@ -7,10 +7,9 @@ main() {
 		source .env
 	fi
 
-	#append commit hash to the end of message by default
-	append_hash=true
-
 	# Parse arg flags
+	# If something is exposed as an environment variable, set/overwrite it
+	# here. Otherwise, set/overwrite the internal variable instead.
 	while : ; do
 		if [[ $1 = "-v" || $1 = "--verbose" ]]; then
 			verbose=true
@@ -22,7 +21,7 @@ main() {
 			commit_message=$2
 			shift 2
 		elif [[ $1 = "-n" || $1 = "--no-hash" ]]; then
-			append_hash=false
+			GIT_DEPLOY_APPEND_HASH=false
 			shift
 		elif [[ $1 = "-c" || $1 = "--config-file" ]]; then
 			source "$2"
@@ -32,7 +31,10 @@ main() {
 		fi
 	done
 
-	# Set default options
+	# Set internal option vars from the environment and arg flags. All internal
+	# vars should be declared here, with sane defaults if applicable.
+
+	# Source directory & target branch.
 	deploy_directory=${GIT_DEPLOY_DIR:-dist}
 	deploy_branch=${GIT_DEPLOY_BRANCH:-gh-pages}
 
@@ -42,7 +44,10 @@ main() {
 
 	#repository to deploy to. must be readable and writable.
 	repo=${GIT_DEPLOY_REPO:-origin}
-	
+
+	#append commit hash to the end of message by default
+	append_hash=${GIT_DEPLOY_APPEND_HASH:-true}
+
 	enable_expanded_output
 
 	if ! git diff --exit-code --quiet --cached; then
