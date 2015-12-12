@@ -7,6 +7,12 @@ main() {
 		source .env
 	fi
 
+	# Set args from file specified on the command-line.
+	if [[ $1 = "-c" || $1 = "--config-file" ]]; then
+			source "$2"
+			shift 2
+	fi
+
 	# Parse arg flags
 	# If something is exposed as an environment variable, set/overwrite it
 	# here. Otherwise, set/overwrite the internal variable instead.
@@ -23,9 +29,6 @@ main() {
 		elif [[ $1 = "-n" || $1 = "--no-hash" ]]; then
 			GIT_DEPLOY_APPEND_HASH=false
 			shift
-		elif [[ $1 = "-c" || $1 = "--config-file" ]]; then
-			source "$2"
-			shift 2
 		else
 			break
 		fi
