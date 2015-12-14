@@ -2,8 +2,7 @@
 set -o errexit #abort if any command fails
 me=$(basename "$0")
 
-read -r -d '' "help_message" <<EOF || true
-
+help_message="\
 Deploy generated files to a git branch.
 
 Usage:
@@ -31,12 +30,7 @@ Variables:
 These variables have default values defined in the script. The defaults can be
 overridden by environment variables. Any environment variables are overridden
 by values set in a '.env' file (if it exists), and in turn by those set in a
-file specified by the '--config-file' option.
-EOF
-
-print_help() {
-	printf "%s\n" "$help_message"
-}
+file specified by the '--config-file' option."
 
 main() {
 	# Set args from a local environment file.
@@ -50,7 +44,7 @@ main() {
 	# Parse arg flags
 	while : ; do
 		if [[ $1 = "-h" || $1 = "--help" ]]; then
-			print_help
+			echo "$help_message"
 			return 0
 		elif [[ $1 = "-v" || $1 = "--verbose" ]]; then
 			verbose=true
