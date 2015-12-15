@@ -1,6 +1,7 @@
 This is a script for deploying generated files to a git branch, such as when building a single-page app using [Yeoman](http://yeoman.io) and deploying to [GitHub Pages](http://pages.github.com). Unlike the [git-subtree approach](https://github.com/yeoman/yeoman.io/blob/source/app/learning/deployment.md#git-subtree-command), it does not require the generated files be committed to the source branch. It keeps a linear history on the deploy branch and does not make superfluous commits or deploys when the generated files do not change.
 
-[![Circle CI](https://circleci.com/gh/X1011/git-directory-deploy.svg?style=svg)](https://circleci.com/gh/X1011/git-directory-deploy)
+Ubuntu: [![Circle CI](https://circleci.com/gh/X1011/git-directory-deploy.svg?style=svg)](https://circleci.com/gh/X1011/git-directory-deploy)
+OS X: [![Travis CI](https://travis-ci.org/X1011/git-directory-deploy.svg)](https://travis-ci.org/X1011/git-directory-deploy)
 
 For an example of use, see [X1011/verge-mobile-bingo](https://github.com/X1011/verge-mobile-bingo).
 
