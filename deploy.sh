@@ -60,8 +60,10 @@ main() {
 		echo "Deploy directory '$deploy_directory' does not exist. Aborting." >&2
 		return 1
 	fi
-
-	if [[ -z `ls --almost-all "$deploy_directory" 2> /dev/null` && -z $allow_empty ]]; then
+	
+	local listing # declaring separately because 'local' always exits with 0
+	listing=`ls --almost-all "$deploy_directory"`
+	if [[ ! $listing && ! $allow_empty ]]; then
 		echo "Deploy directory '$deploy_directory' is empty. Aborting. If you're sure you want to deploy an empty tree, use the --allow-empty / -e flag." >&2
 		return 1
 	fi
