@@ -4,7 +4,9 @@ source lib/assert.bash
 source deploy.sh --source-only
 
 setup() {
-	tmp=`mktemp -dt deploy_test.XXXX`
+	run mktemp -dt deploy_test.XXXX
+	assert_success
+	tmp=$output
 	pushd "$tmp" >/dev/null
 	create_repo
 }
