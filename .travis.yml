@@ -1,3 +1,4 @@
+language: bash
 os: osx
 
 before_install:
