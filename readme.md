@@ -37,6 +37,8 @@ Do this every time you want to deploy, or have your CI server do it.
 5. run `./deploy.sh`
 
 ### options
+`-h`, `--help`: show the program's help info.
+
 `-c`, `--config-file`: specify a file that overrides the script's default configuration, or those values set in `.env`. The syntax for this file should be normal `var=value` declarations.
 
 `-m`, `--message <message>`: specify message to be used for the commit on `deploy_branch`. By default, the message is the title of the source commit, prepended with 'publish: '.
