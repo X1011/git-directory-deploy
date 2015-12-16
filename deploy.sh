@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -o errexit #abort if any command fails
 
-main() {
+parse_args() {
 	# Set args from a local environment file.
 	if [ -e ".env" ]; then
 		source .env
@@ -50,6 +50,11 @@ main() {
 
 	#append commit hash to the end of message by default
 	append_hash=${GIT_DEPLOY_APPEND_HASH:-true}
+
+}
+
+main() {
+	parse_args "$@"
 
 	enable_expanded_output
 
