@@ -3,7 +3,7 @@ set -o errexit #abort if any command fails
 me=$(basename "$0")
 
 help_message="\
-Usage: $me [<options>]
+Usage: $me [-c FILE] [<options>]
 Deploy generated files to a git branch.
 
 Options:
@@ -16,7 +16,8 @@ Options:
   -n, --no-hash            Don't append the source commit's hash to the deploy
                            commit's message.
   -c, --config-file PATH   Override default & environment variables' values
-                           with those in set in the file at 'PATH'.
+                           with those in set in the file at 'PATH'. Must be the
+                           first option specified.
 
 Variables:
 
@@ -81,7 +82,6 @@ parse_args() {
 
 	#append commit hash to the end of message by default
 	append_hash=${GIT_DEPLOY_APPEND_HASH:-true}
-
 }
 
 main() {

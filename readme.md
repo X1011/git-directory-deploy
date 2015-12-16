@@ -39,7 +39,7 @@ Do this every time you want to deploy, or have your CI server do it.
 ### options
 `-h`, `--help`: show the program's help info.
 
-`-c`, `--config-file`: specify a file that overrides the script's default configuration, or those values set in `.env`. The syntax for this file should be normal `var=value` declarations.
+`-c`, `--config-file`: specify a file that overrides the script's default configuration, or those values set in `.env`. The syntax for this file should be normal `var=value` declarations. __This option _must_ come first on the command-line__.
 
 `-m`, `--message <message>`: specify message to be used for the commit on `deploy_branch`. By default, the message is the title of the source commit, prepended with 'publish: '.
 
