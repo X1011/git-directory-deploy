@@ -2,7 +2,7 @@ This is a script for deploying generated files to a git branch, such as when bui
 
 [![Circle CI](https://circleci.com/gh/X1011/git-directory-deploy.svg?style=svg)](https://circleci.com/gh/X1011/git-directory-deploy)
 
-For an example of use, see [X1011/verge-mobile-bingo](https://github.com/X1011/verge-mobile-bingo).
+For an example of use, see [X1011/verge-mobile-bingo](https://github.com/X1011/verge-mobile-bingo). For development info, see [contributing.md](contributing.md).
 
 ## configuration
 Download the script (`wget https://github.com/X1011/git-directory-deploy/raw/master/deploy.sh && chmod +x deploy.sh`) and edit these variables within it as needed to fit your project:
@@ -48,53 +48,3 @@ Do this every time you want to deploy, or have your CI server do it.
 `-v`, `--verbose`: echo expanded commands as they are executed, using the xtrace option. This can be useful for debugging, as the output will include the values of variables that are being used, such as $commit_title and $deploy_directory. However, the script makes special effort to not output the value of $repo, as it may contain a secret authentication token.
 
 `-e`, `--allow-empty`: allow deployment of an empty directory. By default, the script will abort if `deploy_directory` is empty.
-
-## develop
-
-Some guidelines and tips for development.
-
-### git
-
-1. [Fork](https://help.github.com/articles/fork-a-repo/) this repository.
-2. Make changes on a branch of your choice. Atomic commits are better than clobbering commits.
-3. [Sync your fork](https://help.github.com/articles/syncing-a-fork/) and keep your branch up to date with [master](https://github.com/X1011/git-directory-deploy/tree/master).
-4. [Create a pull request](https://help.github.com/articles/creating-a-pull-request/) to this repository.
-
-Once a pull request is opened, be careful with `git commit --amend` and `git rebase`. No need to squash a branch into multiple commits, either. When in doubt, preserve your history.
-
-### syntax & style
-
-- Tabs for indenting. Spaces for alignment.
-- Wrap discrete chunks of code in functions. This makes writing test easier.
-- See [.editorconfig](.editorconfig) for more specifics and exceptions.
-- Follow the style you see in the code that's already here.
-
-### testing
-
-Have [bats](https://github.com/sstephenson/bats#readme) installed.
-
-Groups of tests are in `.bats` files in the repository root. You can [run tests manually](https://github.com/sstephenson/bats#running-tests) or use the `./watch` script (requires [`entr`](https://github.com/clibs/entr)) to automatically run them when any file is changed.
-
-Discrete chunks of code should have a discrete set of tests. If possible, tests should call the relevant function rather than running the whole script.
-
-Write test names so that they tell a story for a test group, and indent each test 
-
-For anything that involves touching the file system, use `setup()` & `teardown()` functions for the `.bats` file that make the tests run in a temporary folder:
-
-```bash
-setup() {
-	run mktemp -dt deploy_test.XXXX
-	assert_success
-	tmp=$output
-	pushd "$tmp" >/dev/null
-}
-```
-
-```bash
-teardown() {
-	popd >/dev/null
-	rm -rf "$tmp"
-}
-```
-
-Finally, make sure the `.bats` files are in a path that's accounted-for in [`circle.yml`](circle.yml).
