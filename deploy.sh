@@ -38,8 +38,8 @@ parse_args() {
 
 	# Set args from file specified on the command-line.
 	if [[ $1 = "-c" || $1 = "--config-file" ]]; then
-			source "$2"
-			shift 2
+		source "$2"
+		shift 2
 	fi
 
 	# Parse arg flags
