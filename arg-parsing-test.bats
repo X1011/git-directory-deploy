@@ -71,4 +71,8 @@ write_conf_file() {
 	parse_args --config-file conf --no-hash
 	assert that "$append_hash" = "false"
 }
+@test '        sets a commit message with spaces in it.' {
+	parse_args --message "a message"
+	assert that "$commit_message" = "a message"
+}
 
