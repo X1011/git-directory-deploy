@@ -1,22 +1,21 @@
 Some guidelines and tips for development.
 
-### git
+## git
 
-1. [Fork](https://help.github.com/articles/fork-a-repo/) this repository.
-2. Make changes on a branch of your choice. Atomic commits are better than clobbering commits.
-3. [Sync your fork](https://help.github.com/articles/syncing-a-fork/) and keep your branch up to date with [master](https://github.com/X1011/git-directory-deploy/tree/master).
-4. [Create a pull request](https://help.github.com/articles/creating-a-pull-request/) to this repository.
+Feel free to [fork](https://help.github.com/articles/fork-a-repo) this repository and [create a pull request](https://help.github.com/articles/creating-a-pull-request). Before making a large change, please open an issue to discuss it.
 
-Once a pull request is opened, be careful with `git commit --amend` and `git rebase`. No need to squash a branch into multiple commits, either. When in doubt, preserve your history.
+Make descriptive, granular commits. No need to squash them for the pull request.
 
-### syntax & style
+If you drift too far from the master branch, please [merge](https://help.github.com/articles/syncing-a-fork) rather than rebasing. This will preserve the commit history that shows the context in which the code was written.
+
+## style
 
 - Tabs for indenting. Spaces for alignment.
-- Wrap discrete chunks of code in functions. This makes writing test easier.
+- Wrap discrete chunks of code in functions. This makes writing tests easier.
 - See [.editorconfig](.editorconfig) for more specifics and exceptions.
 - Follow the style you see in the code that's already here.
 
-### testing
+## testing
 
 Have [bats](https://github.com/sstephenson/bats#readme) installed.
 
@@ -24,9 +23,9 @@ Groups of tests are in `.bats` files in the repository root. You can [run tests 
 
 Discrete chunks of code should have a discrete set of tests. If possible, tests should call the relevant function rather than running the whole script.
 
-Write test names so that they tell a story for a test group, and indent each test 
+Write test names so that they tell a story for a test group, and indent each test.
 
-For anything that involves touching the file system, use `setup()` & `teardown()` functions for the `.bats` file that make the tests run in a temporary folder:
+For anything that involves touching the file system, use `setup()` & `teardown()` functions to create a temporary directory:
 
 ```bash
 setup() {
