@@ -17,15 +17,12 @@ teardown() {
 
 set_env_vars() {
 	# Set environment variables.
-	export GIT_DEPLOY_USERNAME=env-username
-	export GIT_DEPLOY_EMAIL=env-email
 	export GIT_DEPLOY_APPEND_HASH=env-var
 }
 
 write_env_file() {
 	# Write a '.env' file to override environment variables.
 	cat <<-EOF > .env
-		GIT_DEPLOY_EMAIL=dotenv-email
 		GIT_DEPLOY_APPEND_HASH=env-file
 	EOF
 }
@@ -33,7 +30,6 @@ write_env_file() {
 write_conf_file() {
 	# Write a config-file to override '.env'.
 	cat <<-EOF > conf
-		GIT_DEPLOY_EMAIL=conf-email
 		GIT_DEPLOY_APPEND_HASH=conf-file
 	EOF
 }
