@@ -23,7 +23,9 @@ Groups of tests are in `.bats` files in the repository root. You can [run tests 
 
 Discrete chunks of code should have a discrete set of tests. If possible, tests should call the relevant function rather than running the whole script.
 
-Write test names so that they tell a story for a test group, and indent each test.
+Write tests like [executable specifications](https://youtu.be/XcT4yYu_TTs?t=17m20s).
+
+Group together tests that share a common subject by indenting test names with spaces, to achieve output similar to [Mocha](http://mochajs.org/#spec) or [RSpec](http://rspec.info/#asciicast-iframe-14103).
 
 For anything that involves touching the file system, use `setup()` & `teardown()` functions to create a temporary directory:
 
