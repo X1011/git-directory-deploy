@@ -2,7 +2,7 @@ This is a script for deploying generated files to a git branch, such as when bui
 
 [![Circle CI](https://circleci.com/gh/X1011/git-directory-deploy.svg?style=svg)](https://circleci.com/gh/X1011/git-directory-deploy)
 
-For an example of use, see [X1011/verge-mobile-bingo](https://github.com/X1011/verge-mobile-bingo).
+For an example of use, see [X1011/verge-mobile-bingo](https://github.com/X1011/verge-mobile-bingo). For development info, see [contributing.md](contributing.md).
 
 ## configuration
 Download the script (`wget https://github.com/X1011/git-directory-deploy/raw/master/deploy.sh && chmod +x deploy.sh`) and edit these variables within it as needed to fit your project:
